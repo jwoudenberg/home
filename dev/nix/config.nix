@@ -1,6 +1,7 @@
 {
   config = { allowUnfree = true; };
   overlays = [
+    (import ./overlays/filebrowser.nix)
     (import ./overlays/nixfmt.nix)
     (import ./overlays/pass.nix)
     (import ./overlays/pdfrg.nix)
