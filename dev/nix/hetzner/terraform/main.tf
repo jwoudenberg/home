@@ -19,19 +19,6 @@ resource "hcloud_server" "ai-banana" {
     EOT
 }
 
-resource "hcloud_server" "experimental-salad" {
-  name        = "experimental-salad"
-  image       = "ubuntu-20.04"
-  server_type = "cx11"
-  location    = "nbg1"
-  ssh_keys    = [hcloud_ssh_key.jasper.id]
-  backups     = false
-  user_data   = <<-EOT
-    #!/bin/sh
-    curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=hetznercloud NIX_CHANNEL=nixos-20.03 bash 2>&1 | tee /tmp/infect.log
-    EOT
-}
-
 resource "hcloud_volume" "volume1" {
   name     = "volume1"
   size     = 80
@@ -48,4 +35,31 @@ resource "hcloud_volume_attachment" "volume1" {
 resource "hcloud_ssh_key" "jasper" {
   name       = "Jaspers key"
   public_key = file("~/.ssh/id_rsa.pub")
+}
+
+
+resource "hcloud_server" "experimental-salad" {
+  name        = "experimental-salad"
+  image       = "ubuntu-20.04"
+  server_type = "cx11"
+  location    = "nbg1"
+  ssh_keys    = [hcloud_ssh_key.jasper.id]
+  backups     = false
+  user_data   = <<-EOT
+    #!/bin/sh
+    curl https://raw.githubusercontent.com/elitak/nixos-infect/master/nixos-infect | PROVIDER=hetznercloud NIX_CHANNEL=nixos-20.03 bash 2>&1 | tee /tmp/infect.log
+    EOT
+}
+
+resource "cloudflare_record" "files" {
+  zone_id = lookup(data.cloudflare_zones.jasperwoudenberg_com.zones[0], "id")
+  name    = "files"
+  value   = hcloud_server.experimental-salad.ipv4_address
+  type    = "A"
+}
+
+data "cloudflare_zones" "jasperwoudenberg_com" {
+  filter {
+    name = "jasperwoudenberg.com"
+  }
 }

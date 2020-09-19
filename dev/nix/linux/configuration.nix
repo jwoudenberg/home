@@ -61,18 +61,6 @@ in {
   virtualisation.docker.enable = true;
   services.mullvad-vpn.enable = true;
   services.fwupd.enable = true;
-  services.filebrowser.enable = true;
-  services.filebrowser.config = {
-    port = 8082;
-    # "auth.method" = "noauth";
-  };
-  services.filebrowser.users = [
-    {
-      name = "jasper";
-      scope = "/nix";
-    }
-    { name = "hiske"; }
-  ];
 
   users.users.jasper = {
     isNormalUser = true;

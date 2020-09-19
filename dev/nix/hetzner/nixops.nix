@@ -25,14 +25,25 @@ in {
       agree = true;
       config = ''
         files.jasperwoudenberg.com {
-          gzip
-          minify
-          log syslog
-
-
+          root * /var/www
+          file_server
         }
       '';
     };
+
+    # Filebrowser
+    services.filebrowser.enable = true;
+    services.filebrowser.config = {
+      port = 8082;
+      "auth.method" = "noauth";
+    };
+    services.filebrowser.users = [
+      {
+        name = "jasper";
+        scope = "/var/www";
+      }
+      { name = "hiske"; }
+    ];
   };
   ai-banana = { config, pkgs, ... }: {
     # NixOps

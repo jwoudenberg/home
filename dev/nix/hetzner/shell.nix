@@ -10,5 +10,6 @@ in pkgs.mkShell {
   shellHook = ''
     export HCLOUD_TOKEN="$(pass show keys/hetzner_cloud_token)"
     export RESILIO_MUSIC_READONLY="$(pass show keys/resilio_music_readonly)"
+    export CLOUDFLARE_API_TOKEN="$(pass show keys/cloudflare_api_token)"
   '';
 }
